@@ -30,13 +30,13 @@
 				width: window.innerWidth,
 				height: window.innerHeight,
 				velocity: 0.1,
-				length: 50,
+				length: 100,
 				distance: 100,
 				radius: 150,
 				stars: []
 			},
 			config = $.extend(true, {}, defaults, options);
-
+console.log('Количество звезд:', config.length);
 		function Star () {
 			this.x = Math.random() * canvas.width;
 			this.y = Math.random() * canvas.height;
@@ -212,7 +212,7 @@ $(document).ready(function() {
 		line: {
 			color: 'rgba(255, 255, 255, .5)'
 		},
-		length: (window.innerWidth / 6),
+		length: (window.innerWidth / 8),
 		radius: (window.innerWidth / 5)
 	});
 });
@@ -460,3 +460,4 @@ function setupTabTitle() {
 
 // Вызываем функцию
 setupTabTitle();
+
