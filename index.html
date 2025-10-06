@@ -25,24 +25,39 @@
         <main class="main">
             <section class="about">
                 <h2>Обо мне</h2>
-                <p>Учусь в Уральском политехническом колледже - МЦК. Увлекаюсь программированием и разроботкой. Этот сайт — моя первая работа в Frontend.</p>
+                <p class="about-text">Учусь в Уральском политехническом колледже - МЦК. <br>
+                    Увлекаюсь программированием и разроботкой. Этот сайт - моя первая работа в Frontend. <br>
+                    Люблю сидеть за компом разбираться, как всё работает. <br>
+                </p>
             </section>
-
-            <section class="skills">
+            <section class="plans">
                 <h2>Что планирую изучать</h2>
-                <div class="skills-grid">
-                    <div class="skill-card">
+                <div class="plans-grid">
+                    <div class="plans-card">
                         <h3>Frontend</h3>
                         <p>HTML, CSS, JavaScript</p>
                     </div>
-                    <div class="skill-card">
-                        <h3>Системное программирование</h3>
-                        <p>C++, python,</p>
+                    <div class="plans-card">
+                        <h3>Системное программирование и разработка</h3>
+                        <p>C++, python</p>
                     </div>
 
                 </div>
             </section>
-
+            <section class="skills">
+                <h2>Навыки</h2>
+                <div class="skills-list">
+                    <h3> • Программирование на python</h3>
+                    <h3> • Гуглить</h3>
+                </div>
+            </section>
+            <style>
+                .skills-list {
+                    padding-left: 10px;
+                    line-height: 200%;
+                    font-size: larger;
+                }
+            </style>
             <section class="projects">
                 <h2>Мои проекты</h2>
                 <div class="projects-carousel">
@@ -92,7 +107,6 @@
                     
                     <button class="carousel-btn next-btn">›</button>
                 </div>
-                
                 <!-- Индикаторы (точки) -->
                 <div class="carousel-indicators">
                     <span class="indicator active"></span>
@@ -101,6 +115,7 @@
                     <span class="indicator"></span>
                 </div>
             </section>
+            
         </main>
 
         <footer class="footer">
