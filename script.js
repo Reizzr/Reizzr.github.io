@@ -212,7 +212,7 @@ $(document).ready(function() {
 		line: {
 			color: 'rgba(255, 255, 255, .5)'
 		},
-		length: (window.innerWidth / 8),
+		length: (window.innerWidth / 10),
 		radius: (window.innerWidth / 5)
 	});
 });
