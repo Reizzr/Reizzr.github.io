@@ -370,3 +370,53 @@ class ProjectsCarousel {
 document.addEventListener('DOMContentLoaded', function() {
     new ProjectsCarousel();
 });
+
+
+
+
+// Динамический заголовок вкладки с циклической сменой сообщений
+function setupTabTitle() {
+    const originalTitle = document.title;
+    let isHidden = false;
+    let titleInterval;
+    
+    const awayMessages = [
+        '😢 Эй, вернись!',
+        '🚀 Тут классный код!',
+        '💻 Смотри что я сделал!', 
+        '⭐ Не уходи далеко!',
+        '🎮 Продолжим просмотр!'
+    ];
+    
+    let currentMessageIndex = 0;
+    
+    function cycleAwayMessages() {
+        document.title = awayMessages[currentMessageIndex];
+        currentMessageIndex = (currentMessageIndex + 1) % awayMessages.length;
+    }
+    
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            // Пользователь ушёл со вкладки
+            isHidden = true;
+            currentMessageIndex = 0;
+            
+            // Запускаем цикл смены сообщений каждые 2 секунды
+            titleInterval = setInterval(cycleAwayMessages, 2000);
+            cycleAwayMessages(); // Показываем первое сообщение сразу
+            
+        } else {
+            // Пользователь вернулся на вкладку
+            isHidden = false;
+            document.title = originalTitle;
+            
+            // Останавливаем цикл
+            if (titleInterval) {
+                clearInterval(titleInterval);
+            }
+        }
+    });
+}
+
+// Вызываем функцию
+setupTabTitle();
