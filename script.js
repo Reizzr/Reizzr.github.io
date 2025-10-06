@@ -264,7 +264,7 @@ document.querySelector('.copyright').textContent =
 
 
 
-// Карусель проектов с правильным переключением
+// Карусель проектов с отключением автопереключения после ручного управления
 class ProjectsCarousel {
     constructor() {
         this.currentIndex = 0;
@@ -272,24 +272,40 @@ class ProjectsCarousel {
         this.indicators = document.querySelectorAll('.indicator');
         this.totalProjects = this.projects.length;
         this.isAnimating = false;
+        this.isCarouselActive = false;
+        this.autoPlayInterval = null;
+        this.wasManuallyControlled = false; // Флаг ручного управления
         
         this.init();
     }
     
     init() {
+        // Наблюдаем за секцией projects
+        this.observeProjectsSection();
+        
         // Обработчики для кнопок
         document.querySelector('.prev-btn').addEventListener('click', () => {
-            this.prevProject();
+            if (this.isCarouselActive) {
+                this.wasManuallyControlled = true; // Отмечаем ручное управление
+                this.stopAutoPlay(); // Останавливаем автопереключение
+                this.prevProject();
+            }
         });
         
         document.querySelector('.next-btn').addEventListener('click', () => {
-            this.nextProject();
+            if (this.isCarouselActive) {
+                this.wasManuallyControlled = true; // Отмечаем ручное управление
+                this.stopAutoPlay(); // Останавливаем автопереключение
+                this.nextProject();
+            }
         });
         
         // Обработчики для индикаторов
         this.indicators.forEach((indicator, index) => {
             indicator.addEventListener('click', () => {
-                if (!this.isAnimating && index !== this.currentIndex) {
+                if (this.isCarouselActive && !this.isAnimating && index !== this.currentIndex) {
+                    this.wasManuallyControlled = true; // Отмечаем ручное управление
+                    this.stopAutoPlay(); // Останавливаем автопереключение
                     this.goToProject(index);
                 }
             });
@@ -297,34 +313,50 @@ class ProjectsCarousel {
         
         // Показываем первый слайд
         this.showProject(this.currentIndex);
+    }
+    
+    // Наблюдаем за появлением секции projects
+    observeProjectsSection() {
+        const projectsSection = document.querySelector('.projects');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !this.isCarouselActive) {
+                    this.activateCarousel();
+                }
+            });
+        }, { threshold: 0.3 });
         
-        // Автопрокрутка
-        this.startAutoPlay();
+        observer.observe(projectsSection);
+    }
+    
+    // Активация карусели
+    activateCarousel() {
+        this.isCarouselActive = true;
+        // Запускаем автопереключение только если не было ручного управления
+        if (!this.wasManuallyControlled) {
+            this.startAutoPlay();
+        }
     }
     
     showProject(index) {
-        if (this.isAnimating) return;
+        if (this.isAnimating || !this.isCarouselActive) return;
         
         this.isAnimating = true;
         
         const currentProject = this.projects[this.currentIndex];
         const nextProject = this.projects[index];
         
-        // Скрываем текущий слайд
         if (currentProject) {
             currentProject.classList.remove('active');
         }
         
-        // Показываем следующий слайд
         nextProject.classList.add('active');
         
-        // Обновляем индикаторы
         this.indicators.forEach(indicator => {
             indicator.classList.remove('active');
         });
         this.indicators[index].classList.add('active');
         
-        // Завершаем анимацию
         setTimeout(() => {
             this.currentIndex = index;
             this.isAnimating = false;
@@ -332,38 +364,46 @@ class ProjectsCarousel {
     }
     
     nextProject() {
+        if (!this.isCarouselActive || this.isAnimating) return;
+        
         let nextIndex = this.currentIndex + 1;
         if (nextIndex >= this.totalProjects) {
             nextIndex = 0;
         }
         this.showProject(nextIndex);
-        this.resetAutoPlay();
     }
     
     prevProject() {
+        if (!this.isCarouselActive || this.isAnimating) return;
+        
         let prevIndex = this.currentIndex - 1;
         if (prevIndex < 0) {
             prevIndex = this.totalProjects - 1;
         }
         this.showProject(prevIndex);
-        this.resetAutoPlay();
     }
     
     goToProject(index) {
+        if (!this.isCarouselActive || this.isAnimating) return;
         this.showProject(index);
-        this.resetAutoPlay();
     }
     
     startAutoPlay() {
+        if (!this.isCarouselActive || this.wasManuallyControlled) return;
+        this.stopAutoPlay();
         this.autoPlayInterval = setInterval(() => {
             this.nextProject();
-        }, 10000);
+        }, 4000);
     }
     
-    resetAutoPlay() {
-        clearInterval(this.autoPlayInterval);
-        this.startAutoPlay();
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
     }
+    
+    // Убрал resetAutoPlay так как он больше не нужен
 }
 
 // Инициализация карусели
