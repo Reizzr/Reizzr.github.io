@@ -162,6 +162,11 @@ h2 {
     font-size: 0.9rem;
 }
 
+.qr-code {
+    padding-left: 35%; 
+    padding-top: 10px;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .title {
@@ -184,6 +189,10 @@ h2 {
     .social-link {
         width: 200px;
         text-align: center;
+    }
+
+    .qr-code {
+        display: none !important;
     }
 
 }
